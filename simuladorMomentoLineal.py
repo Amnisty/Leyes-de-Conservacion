@@ -52,17 +52,17 @@ class Particle:
     def vy(self, value):
         self.v[1] = value
 
-    def overlaps(self, other):
+    def sobrepone(self, other):
 
         return np.hypot(*(self.r - other.r)) < self.radius + other.radius
 
-    def draw(self, ax):
+    def dibujado(self, ax):
 
         circle = Circle(xy=self.r, radius=self.radius, **self.styles)
         ax.add_patch(circle)
         return circle
 
-    def advance(self, dt):
+    def movimiento(self, dt):
 
         self.r += self.v * dt
 
@@ -80,7 +80,7 @@ class Particle:
             self.vy = -self.vy
 
 
-class Simulation:
+class Simulacion:
 
     def __init__(self, n, radius=0.01, styles=None):
 
@@ -112,15 +112,15 @@ class Simulation:
                 particle = Particle(x, y, vx, vy, rad, styles)
 
                 for p2 in self.particles:
-                    if p2.overlaps(particle):
+                    if p2.sobrepone(particle):
                         break
                 else:
                     self.particles.append(particle)
                     break
 
-    def handle_collisions(self):
+    def manejo_colisiones(self):
 
-        def change_velocities(p1, p2):
+        def cambio_velocidades(p1, p2):
 
             m1, m2 = p1.radius**2, p2.radius**2
             M = m1 + m2
@@ -132,40 +132,37 @@ class Simulation:
             p1.v = u1
             p2.v = u2
 
-        # We're going to need a sequence of all of the pairs of particles when
-        # we are detecting collisions. combinations generates pairs of indexes
-        # into the self.particles list of Particles on the fly.
         pairs = combinations(range(self.n), 2)
         for i, j in pairs:
-            if self.particles[i].overlaps(self.particles[j]):
-                change_velocities(self.particles[i], self.particles[j])
+            if self.particles[i].sobrepone(self.particles[j]):
+                cambio_velocidades(self.particles[i], self.particles[j])
 
-    def advance_animation(self, dt):
+    def animacion_movimiento(self, dt):
 
         for i, p in enumerate(self.particles):
-            p.advance(dt)
+            p.movimiento(dt)
             self.circles[i].center = p.r
-        self.handle_collisions()
+        self.manejo_colisiones()
         return self.circles
 
-    def advance(self, dt):
+    def movimiento(self, dt):
         for i, p in enumerate(self.particles):
-            p.advance(dt)
-        self.handle_collisions()
+            p.movimiento(dt)
+        self.manejo_colisiones()
 
     def init(self):
 
         self.circles = []
         for particle in self.particles:
-            self.circles.append(particle.draw(self.ax))
+            self.circles.append(particle.dibujado(self.ax))
         return self.circles
 
-    def animate(self, i):
+    def animar(self, i):
 
-        self.advance_animation(0.01)
+        self.animacion_movimiento(0.01)
         return self.circles
 
-    def setup_animation(self):
+    def ajuste_animacion(self):
         self.fig, self.ax = plt.subplots()
         for s in ['top', 'bottom', 'left', 'right']:
             self.ax.spines[s].set_linewidth(2)
@@ -183,16 +180,16 @@ class Simulation:
         else:
             plt.show()
 
-    def do_animation(self, save=False, interval=1, filename='collision.mp4'):
-        self.setup_animation()
-        anim = animation.FuncAnimation(self.fig, self.animate,
+    def hacer_animacion(self, save=False, interval=1, filename='collision.mp4'):
+        self.ajuste_animacion()
+        anim = animation.FuncAnimation(self.fig, self.animar,
                                        init_func=self.init, frames=800, interval=interval, blit=True)
         self.save_or_show_animation(anim, save, filename)
 
 
 if __name__ == '__main__':
-    nparticles = 20
+    nparticles = 50
     radii = np.random.random(nparticles)*0.03+0.02
     styles = {'edgecolor': 'C0', 'linewidth': 2, 'fill': None}
-    sim = Simulation(nparticles, radii, styles)
-    sim.do_animation(save=False)
+    sim = Simulacion(nparticles, radii, styles)
+    sim.hacer_animacion(save=False)
