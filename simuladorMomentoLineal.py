@@ -3,9 +3,6 @@ from matplotlib import animation
 from matplotlib.patches import Circle
 import matplotlib.pyplot as plt
 import numpy as np
-import cgitb
-cgitb.enable()
-
 
 class Particle:
 
