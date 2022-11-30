@@ -8,6 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+
+
+
     <title>Leyes de Conservacion</title>
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="assets/ideacon.ico" />
@@ -87,8 +92,7 @@
             </div>
             <img alt="Figure_1" class="fig"
             src="https://scipython.com/static/media/uploads/blog/collision/collision-img.gif">
-            <pre class="line-numbers">
-                <code class="language-python">
+            <py-script>
                     from itertools import combinations
                     from matplotlib import animation
                     from matplotlib.patches import Circle
@@ -282,8 +286,7 @@
                         sim = Simulacion(nparticles, radii, styles)
                         sim.hacer_animacion(save=False)
                     
-                </code>
-                </pre>
+            </py-script>
         </div>
     </div>
     <!-- Bootstrap core JS-->
