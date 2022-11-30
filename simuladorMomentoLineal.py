@@ -3,6 +3,7 @@ from matplotlib import animation
 from matplotlib.patches import Circle
 import matplotlib.pyplot as plt
 import numpy as np
+import asyncio
 
 class Particle:
 
@@ -180,7 +181,7 @@ class Simulacion:
     def hacer_animacion(self, save=False, interval=1, filename='collision.mp4'):
         self.ajuste_animacion()
         anim = animation.FuncAnimation(self.fig, self.animar,
-                                       init_func=self.init, frames=800, interval=interval, blit=True)
+                                       init_func=self.init, frames=500, interval=interval, blit=True)
         self.save_or_show_animation(anim, save, filename)
 
 
